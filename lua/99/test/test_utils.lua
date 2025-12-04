@@ -1,5 +1,15 @@
 local M = {}
 
+function M.next_frame()
+    local next = false
+    vim.schedule(function()
+        next = true
+    end)
+
+    vim.wait(1000, function() return next end)
+end
+
+
 M.created_files = {}
 
 --- @class _99.test.ProviderRequest
@@ -19,7 +29,7 @@ end
 --- @param query string
 ---@param context _99.Context
 ---@param observer _99.ProviderObserver?
-function TestProvider:make_reqest(query, context, observer)
+function TestProvider:make_request(query, context, observer)
     self.request = {
         query = query,
         context = context,
@@ -33,6 +43,7 @@ function TestProvider:resolve(success, result)
     assert(self.request, "you cannot call resolve until make_request is called")
     local obs = self.request.observer
     if obs then
+        print("complete callback", vim.inspect(obs))
         obs.on_complete(success, result)
     end
     self.request = nil

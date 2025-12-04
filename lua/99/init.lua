@@ -47,8 +47,7 @@ function _99.implement_fn()
 end
 
 function _99.fill_in_function()
-    local fif = ops.fill_in_function(_99_state)
-    fif:start()
+    ops.fill_in_function(_99_state)
 end
 
 --- @param opts _99.Options?

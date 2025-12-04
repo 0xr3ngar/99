@@ -60,7 +60,6 @@ local function update_with_cot(_99, location, thoughts)
 end
 
 --- @param _99 _99.State
---- @return _99.Request
 local function fill_in_function(_99)
     local ts = editor.treesitter
     local cursor = Point:from_cursor()
@@ -94,15 +93,6 @@ local function fill_in_function(_99)
     local request = Request.new({
         provider = _99.provider_override,
         model = _99.model,
-        on_stdout = function(line) end,
-        on_complete = function(_, ok, response)
-            if not ok then
-                Logger:fatal(
-                    "unable to fill in function, enable and check logger for more details"
-                )
-            end
-            update_file_with_changes(response, location)
-        end,
         context = context,
     })
 
@@ -110,7 +100,19 @@ local function fill_in_function(_99)
     location.marks.function_location = marks(location.buffer, range)
     request:add_prompt_content(_99.prompts.prompts.fill_in_function)
 
-    return request
+    request:start({
+        on_stdout = function(line) end,
+        on_complete = function(ok, response)
+            if not ok then
+                Logger:fatal(
+                    "unable to fill in function, enable and check logger for more details"
+                )
+            end
+            update_file_with_changes(response, location)
+        end,
+        on_stderr = function(line)
+        end,
+    })
 end
 
 return fill_in_function

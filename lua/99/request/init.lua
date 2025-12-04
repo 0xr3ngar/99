@@ -12,7 +12,6 @@ end
 --- @param opts _99.Request.Opts
 local function validate_opts(opts)
     assert(opts.model, "you must provide a model for hange requests to work")
-    assert(type(opts.on_complete) == "function", "on_complete must be provided")
     assert(opts.context, "you must provide context")
     assert(opts.provider, "you must provide a model provider")
 end
@@ -28,6 +27,7 @@ end
 --- @field make_request fun(self: _99.Provider, query: string, context: _99.Context, observer: _99.ProviderObserver)
 
 local DevNullObserver = {
+    name = "DevNullObserver",
     on_stdout = function() end,
     on_stderr = function() end,
     on_complete = function() end,
@@ -38,7 +38,7 @@ local OpenCodeProvider = {}
 --- @param query string
 ---@param context _99.Context
 ---@param observer _99.ProviderObserver?
-function OpenCodeProvider:make_reqest(query, context, observer)
+function OpenCodeProvider:make_request(query, context, observer)
     observer = observer or DevNullObserver
     local id = get_id()
     Logger:debug("99#make_query", "id", id, "query", query)
@@ -107,13 +107,11 @@ end
 
 --- @class _99.Request.Opts
 --- @field model string
---- @field on_complete fun(req: _99.Request, success: boolean, res: string): nil
 --- @field context _99.Context
 --- @field provider _99.Provider?
 
 --- @class _99.Request.Config
 --- @field model string
---- @field on_complete fun(req: _99.Request, success: boolean, res: string): nil
 --- @field context _99.Context
 --- @field provider _99.Provider
 

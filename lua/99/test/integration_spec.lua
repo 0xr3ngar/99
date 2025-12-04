@@ -5,7 +5,7 @@ local eq = assert.are.same
 local test_content = require("99.test.test_content")
 
 --- @param content string[]
---- @return _99.Provider, number
+--- @return _99.test.Provider, number
 local function setup(content)
     local p = test_utils.TestProvider.new()
     _99.setup({
@@ -19,7 +19,7 @@ end
 --- @param buffer number
 --- @return string[]
 local function r(buffer)
-    return vim.api.nvim_buf_get_lines(buffer, 0, -1)
+    return vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
 end
 
 describe("fill_in_function", function()
@@ -33,6 +33,18 @@ describe("fill_in_function", function()
             "",
             "",
             "",
+            "end",
+            "",
+        }
+        eq(expected_state, r(buffer))
+
+        p:resolve(true, "function foo()\n    return 42\nend")
+        test_utils.next_frame()
+
+        expected_state = {
+            "",
+            "function foo()",
+            "    return 42",
             "end",
             "",
         }
