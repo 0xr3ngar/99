@@ -1,8 +1,4 @@
 " covers all package managers i am willing to cover
-" PRIORITY: lazy.nvim paths FIRST (prepend to ensure priority)
-set rtp^=~/.local/share/nvim/lazy/nvim-treesitter
-set rtp^=~/.local/share/nvim/lazy/plenary.nvim
-" Additional paths (append)
 set rtp+=.
 set rtp+=../plenary.nvim
 set rtp+=../nvim-treesitter
@@ -12,6 +8,8 @@ set rtp+=~/.local/share/nvim/site/pack/packer/start/plenary.nvim
 set rtp+=~/.local/share/nvim/site/pack/packer/start/nvim-treesitter
 set rtp+=~/.local/share/lunarvim/site/pack/packer/start/plenary.nvim
 set rtp+=~/.local/share/lunarvim/site/pack/packer/start/nvim-treesitter
+set rtp^=~/.local/share/nvim/lazy/nvim-treesitter
+set rtp^=~/.local/share/nvim/lazy/plenary.nvim
 
 set autoindent
 set tabstop=4
