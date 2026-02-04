@@ -23,6 +23,11 @@ runtime! plugin/nvim-treesitter.lua
 lua <<EOF
 vim.opt.rtp:append(vim.fn.stdpath('data') .. '/site')
 
+-- Always setup nvim-treesitter so it knows where to find parsers
+local install_dir = vim.fn.stdpath('data') .. '/site'
+local ts = require('nvim-treesitter')
+ts.setup({ install_dir = install_dir })
+
 -- parsers to attempt to install (for user convenience)
 local all_parsers = {
   'c', 'cpp', 'go', 'lua', 'php', 'python', 'typescript',
@@ -46,8 +51,7 @@ local function missing_parsers(parsers)
 end
 
 local function install_with_main_branch_api(parsers)
-  local install_dir = vim.fn.stdpath('data') .. '/site'
-  require('nvim-treesitter').setup({ install_dir = install_dir })
+  -- setup is already done above, just install
   require('nvim-treesitter').install(parsers):wait(300000)
 end
 
