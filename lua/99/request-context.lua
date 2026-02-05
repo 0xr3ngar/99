@@ -15,6 +15,7 @@ local random_file = utils.random_file
 --- @field xid number
 --- @field range _99.Range?
 --- @field operation string?
+--- @field text_response boolean?
 --- @field _99 _99.State
 local RequestContext = {}
 RequestContext.__index = RequestContext
@@ -144,10 +145,17 @@ function RequestContext:finalize()
     table.insert(self.ai_context, self._99.prompts.get_file_location(self))
     table.insert(self.ai_context, self._99.prompts.get_range_text(self.range))
   end
-  table.insert(
-    self.ai_context,
-    self._99.prompts.tmp_file_location(self.tmp_file)
-  )
+  if self.text_response then
+    table.insert(
+      self.ai_context,
+      self._99.prompts.tmp_file_location_text(self.tmp_file)
+    )
+  else
+    table.insert(
+      self.ai_context,
+      self._99.prompts.tmp_file_location(self.tmp_file)
+    )
+  end
   return self
 end
 

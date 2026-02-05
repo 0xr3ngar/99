@@ -57,6 +57,12 @@ never provide the requested changes as conversational output. Return only the co
 ONLY provide requested changes by writing the change to TEMP_FILE
 ]]
   end,
+  output_file_text = function()
+    return [[
+NEVER alter any file other than TEMP_FILE.
+Write your complete response to TEMP_FILE.
+]]
+  end,
   --- @param prompt string
   --- @param action string
   --- @return string
@@ -95,6 +101,17 @@ consider the context of the selection and what you are suppose to be implementin
       get_file_contents(range.buffer)
     )
   end,
+  explain_function = function()
+    return [[
+Explain this function concisely.
+Cover what it does, its parameters, return values, and any non-obvious behavior.
+Be direct and technical.
+Do not use markdown formatting unless the user specifically asks for it.
+Do not include the function code in your explanation.
+
+if there are DIRECTIONS, focus your explanation on those specific aspects.
+]]
+  end,
   -- luacheck: ignore 631
   read_tmp = "never attempt to read TEMP_FILE.  It is purely for output.  Previous contents, which may not exist, can be written over without worry",
 }
@@ -109,6 +126,17 @@ local prompt_settings = {
     return string.format(
       "<MustObey>\n%s\n%s\n</MustObey>\n<TEMP_FILE>%s</TEMP_FILE>",
       prompts.output_file(),
+      prompts.read_tmp,
+      tmp_file
+    )
+  end,
+
+  --- @param tmp_file string
+  --- @return string
+  tmp_file_location_text = function(tmp_file)
+    return string.format(
+      "<MustObey>\n%s\n%s\n</MustObey>\n<TEMP_FILE>%s</TEMP_FILE>",
+      prompts.output_file_text(),
       prompts.read_tmp,
       tmp_file
     )

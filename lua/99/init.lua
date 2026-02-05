@@ -12,6 +12,7 @@ local Extensions = require("99.extensions")
 local Agents = require("99.extensions.agents")
 local Providers = require("99.providers")
 local time = require("99.time")
+local ExplanationCache = require("99.ops.explanation-cache")
 
 ---@param path_or_rule string | _99.Agents.Rule
 ---@return _99.Agents.Rule | string
@@ -336,6 +337,41 @@ end
 function _99.fill_in_function(opts)
   opts = process_opts(opts)
   ops.fill_in_function(get_context("fill_in_function"), opts)
+end
+
+--- @param opts? _99.ops.Opts
+function _99.explain_function(opts)
+  opts = process_opts(opts)
+  ops.explain_function(get_context("explain-function"), opts)
+end
+
+--- @param opts? _99.ops.Opts
+function _99.explain_function_prompt(opts)
+  opts = process_opts(opts)
+  local context = get_context("explain-function-with-prompt")
+
+  context.logger:debug("start")
+  Window.capture_input({
+    cb = wrap_window_capture(function(ok, o)
+      if not ok then
+        return
+      end
+      assert(o ~= nil, "if ok, then opts must exist")
+      ops.explain_function(context, o)
+    end, context, opts),
+    on_load = function()
+      Extensions.setup_buffer(_99_state)
+    end,
+    rules = _99_state.rules,
+  })
+end
+
+function _99.show_explanation_window()
+  return ExplanationCache.show_window()
+end
+
+function _99.clear_explanations()
+  ExplanationCache.clear()
 end
 
 --- @param opts _99.ops.Opts
