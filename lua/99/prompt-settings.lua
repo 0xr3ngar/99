@@ -19,21 +19,23 @@ local prompts = {
     return [[
 you are given a prompt and you must search through this project and return code that matches the description provided.
 <Rule>You must provide output without any commentary, just text locations</Rule>
-<Rule>Text locations are in the format of: /path/to/file.ext:lnum:cnum,X
+<Rule>Text locations are in the format of: /path/to/file.ext:lnum:cnum,X,NOTES
 lnum = starting line number 1 based
 cnum = starting column number 1 based
 X = how many lines should be highlighted
+NOTES = A text description of why this highlight is important
 </Rule>
 <Rule>Each location is separated by new lines</Rule>
 <Rule>Each path is specified in absolute pathing</Rule>
+<Rule>You can provide notes you think are relevant per location</Rule>
 <Example>
 You have found 3 locations in files foo.js, bar.js, and baz.js.
 There are 2 locations in foo.js, 1 in bar.js and baz.js.
 <Output>
-/path/to/project/src/foo.js:24:8,3
-/path/to/project/src/foo.js:71:12,7
-/path/to/project/src/bar.js:13:2,1
-/path/to/project/src/baz.js:1:1,52
+/path/to/project/src/foo.js:24:8,3,Some notes here about some stuff, it can contain commas
+/path/to/project/src/foo.js:71:12,7,more notes, everything is great!
+/path/to/project/src/bar.js:13:2,1,more notes again, this time specfically about bar and why bar is so important
+/path/to/project/src/baz.js:1:1,52,Notes about why baz is very important to the results
 </Output>
 <Meaning>
 This means that the search results found
