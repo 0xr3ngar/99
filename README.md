@@ -120,6 +120,20 @@ When prompting, if you have cmp installed as your autocomplete you can use an au
 
 How skill completion and inclusion works is that you start by typing `@`.
 
+## Extensions
+
+### Telescope Model Selector
+
+If you have [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) installed, you can switch models on the fly via the Telescope picker:
+
+```lua
+vim.keymap.set("n", "<leader>9m", function()
+  require("99.extensions.telescope").select_model()
+end)
+```
+
+The selected model is used for all subsequent requests in the current session.
+
 ## API
 You can see the full api at [99 API](./lua/99/init.lua)
 
