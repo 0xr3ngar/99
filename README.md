@@ -167,6 +167,20 @@ vim.keymap.set("n", "<leader>9p", function()
 end)
 ```
 
+### fzf-lua
+
+If you use [fzf-lua](https://github.com/ibhagwan/fzf-lua) instead of telescope, the same pickers are available:
+
+```lua
+vim.keymap.set("n", "<leader>9m", function()
+  require("99.extensions.fzf_lua").select_model()
+end)
+
+vim.keymap.set("n", "<leader>9p", function()
+  require("99.extensions.fzf_lua").select_provider()
+end)
+```
+
 ## API
 You can see the full api at [99 API](./lua/99/init.lua)
 
